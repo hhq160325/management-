@@ -33,8 +33,8 @@ function Dashboard({ data }) {
   };
   const RemoveFunction = (id) => {
     confirm({
-      title: `Delete Staff id: ${id}`,
-      description: "Are you sure you want to delete this staff?",
+      title: `Delete orchid id: ${id}`,
+      description: "Are you sure you want to delete this orchid?",
     })
       .then(() => {
         const baseUrl = `https://6677a9ef145714a1bd754da3.mockapi.io/orchild`;
@@ -46,7 +46,7 @@ function Dashboard({ data }) {
         })
           .then((res) => res.json())
           .then((data) => {
-            toast.success(`Delete Staff ID: ${id} success!`);
+            toast.success(`Delete orchid ID: ${id} success!`);
             setStaff((prevStaff) =>
               prevStaff.filter((staff) => staff.id !== id)
             );
@@ -56,7 +56,6 @@ function Dashboard({ data }) {
           });
       })
       .catch(() => {
-        // User canceled, do nothing
         toast.warning("Cancel delete");
       });
   };
@@ -65,7 +64,7 @@ function Dashboard({ data }) {
       {data ? (
         <TableContainer component={Paper} className="dashboard-container">
           <h2 style={{ textAlign: "center", color: "red", fontSize: "50px" }}>
-            List of User
+            List of orchid
           </h2>
           <Link to="/dashboard/add" className="add-btn">
             <Button variant="contained">Create</Button>
@@ -78,11 +77,11 @@ function Dashboard({ data }) {
             <TableHead>
               <TableRow>
                 <TableCell align="center">ID</TableCell>
-                <TableCell align="center">Avatar</TableCell>
+                <TableCell align="center">image</TableCell>
                 <TableCell align="center">Name</TableCell>
-                <TableCell align="center">Age</TableCell>
-                <TableCell align="center">Address</TableCell>
-                <TableCell align="center">Action</TableCell>
+                <TableCell align="center">color</TableCell>
+                <TableCell align="center">origin</TableCell>
+                <TableCell align="center">description</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -97,8 +96,8 @@ function Dashboard({ data }) {
                     />
                   </TableCell>
                   <TableCell align="center">{staff.name}</TableCell>
-                  <TableCell align="center">{staff.age}</TableCell>
-                  <TableCell align="center">{staff.address}</TableCell>
+                  <TableCell align="center">{staff.color}</TableCell>
+                  <TableCell align="center">{staff.origin}</TableCell>
                   <TableCell align="center">
                     <Button
                       variant="outlined"

@@ -1,17 +1,17 @@
 import React from "react";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Checkbox, FormControlLabel } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import "./Dashboard.scss";
 import { toast } from "react-toastify";
 
-function AddOrchid({ data }) {
+function AddOrchid() {
   const navigate = useNavigate();
   const baseUrl = "https://6677a9ef145714a1bd754da3.mockapi.io/orchid";
 
   const validationSchema = yup.object().shape({
-    Id: yup.string().required("ID is required"),
+    id: yup.string().required("ID is required"),
     name: yup
       .string()
       .max(30, "Name must be at most 30 characters")
@@ -35,7 +35,7 @@ function AddOrchid({ data }) {
 
   const formik = useFormik({
     initialValues: {
-      Id: "",
+      id: "",
       name: "",
       rating: 0,
       isSpecial: false,
@@ -50,7 +50,7 @@ function AddOrchid({ data }) {
     validationSchema,
     onSubmit: (values) => {
       const orchid = {
-        Id: values.Id,
+        id: values.id,
         name: values.name,
         rating: values.rating,
         isSpecial: values.isSpecial,
@@ -89,126 +89,128 @@ function AddOrchid({ data }) {
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="id"
               label="ID"
               variant="filled"
-              value={formik.values.Id}
+              value={formik.values.id}
               onChange={formik.handleChange}
-              name="Id"
-              error={formik.errors.Id}
-              helperText={formik.errors.Id}
+              name="id"
+              error={formik.touched.id && Boolean(formik.errors.id)}
+              helperText={formik.touched.id && formik.errors.id}
             />
           </div>
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="name"
               label="Name"
               variant="filled"
               value={formik.values.name}
               onChange={formik.handleChange}
               name="name"
-              error={formik.errors.name}
-              helperText={formik.errors.name}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
             />
           </div>
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="rating"
               label="Rating"
               variant="filled"
               type="number"
               value={formik.values.rating}
               onChange={formik.handleChange}
               name="rating"
-              error={formik.errors.rating}
-              helperText={formik.errors.rating}
+              error={formik.touched.rating && Boolean(formik.errors.rating)}
+              helperText={formik.touched.rating && formik.errors.rating}
             />
           </div>
           <div className="form-group">
-            <TextField
-              fullWidth
-              id="filled-basic"
+            <FormControlLabel
+              control={
+                <Checkbox
+                  id="isSpecial"
+                  name="isSpecial"
+                  checked={formik.values.isSpecial}
+                  onChange={formik.handleChange}
+                />
+              }
               label="Is Special?"
-              variant="filled"
-              type="checkbox"
-              checked={formik.values.isSpecial}
-              onChange={formik.handleChange}
-              name="isSpecial"
-              error={formik.errors.isSpecial}
-              helperText={formik.errors.isSpecial}
             />
+            {formik.touched.isSpecial && formik.errors.isSpecial && (
+              <div className="error">{formik.errors.isSpecial}</div>
+            )}
           </div>
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="image"
               label="Image URL"
               variant="filled"
               value={formik.values.image}
               onChange={formik.handleChange}
               name="image"
-              error={formik.errors.image}
-              helperText={formik.errors.image}
+              error={formik.touched.image && Boolean(formik.errors.image)}
+              helperText={formik.touched.image && formik.errors.image}
             />
           </div>
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="color"
               label="Color"
               variant="filled"
               value={formik.values.color}
               onChange={formik.handleChange}
               name="color"
-              error={formik.errors.color}
-              helperText={formik.errors.color}
+              error={formik.touched.color && Boolean(formik.errors.color)}
+              helperText={formik.touched.color && formik.errors.color}
             />
           </div>
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="origin"
               label="Origin"
               variant="filled"
               value={formik.values.origin}
               onChange={formik.handleChange}
               name="origin"
-              error={formik.errors.origin}
-              helperText={formik.errors.origin}
+              error={formik.touched.origin && Boolean(formik.errors.origin)}
+              helperText={formik.touched.origin && formik.errors.origin}
             />
           </div>
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="category"
               label="Category"
               variant="filled"
               value={formik.values.category}
               onChange={formik.handleChange}
               name="category"
-              error={formik.errors.category}
-              helperText={formik.errors.category}
+              error={formik.touched.category && Boolean(formik.errors.category)}
+              helperText={formik.touched.category && formik.errors.category}
             />
           </div>
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="habitat"
               label="Habitat"
               variant="filled"
               value={formik.values.habitat}
               onChange={formik.handleChange}
               name="habitat"
-              error={formik.errors.habitat}
-              helperText={formik.errors.habitat}
+              error={formik.touched.habitat && Boolean(formik.errors.habitat)}
+              helperText={formik.touched.habitat && formik.errors.habitat}
             />
           </div>
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="description"
               label="Description"
               variant="filled"
               multiline
@@ -216,21 +218,25 @@ function AddOrchid({ data }) {
               value={formik.values.description}
               onChange={formik.handleChange}
               name="description"
-              error={formik.errors.description}
-              helperText={formik.errors.description}
+              error={
+                formik.touched.description && Boolean(formik.errors.description)
+              }
+              helperText={
+                formik.touched.description && formik.errors.description
+              }
             />
           </div>
           <div className="form-group">
             <TextField
               fullWidth
-              id="filled-basic"
+              id="videoUrl"
               label="Video URL"
               variant="filled"
               value={formik.values.videoUrl}
               onChange={formik.handleChange}
               name="videoUrl"
-              error={formik.errors.videoUrl}
-              helperText={formik.errors.videoUrl}
+              error={formik.touched.videoUrl && Boolean(formik.errors.videoUrl)}
+              helperText={formik.touched.videoUrl && formik.errors.videoUrl}
             />
           </div>
           <div className="form-group">
