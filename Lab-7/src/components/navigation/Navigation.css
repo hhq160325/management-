@@ -1,0 +1,13 @@
+.navbar {
+    background-color: black;
+
+    .me-auto {
+    .nav-link {
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s;
+      padding-left: 10px;
+      margin-left: 50px;
+    }
+}
+}
