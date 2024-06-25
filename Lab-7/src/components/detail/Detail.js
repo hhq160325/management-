@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
+import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 
 function Detail() {
   const { id } = useParams();
@@ -155,7 +156,10 @@ function Detail() {
                   variant="body2"
                   gutterBottom
                 >
-                  Video URL: <a href={orchid.videoUrl}>{orchid.videoUrl}</a>
+                  Start video:
+                  <a href={orchid.videoUrl} style={{ marginLeft: "10px" }}>
+                    <PlayCircleFilledIcon fontSize="large" color="primary" />
+                  </a>
                 </Typography>
               </Grid>
             </Grid>

@@ -78,7 +78,7 @@ function Home() {
                             }}
                             className="btn btn-primary"
                           >
-                            Xem Thêm
+                            More Detail
                           </button>
                         </Link>
                       </div>
