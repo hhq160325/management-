@@ -21,22 +21,22 @@ export default function Contact() {
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Form.Group as={Col} md="4" controlId="validationCustom01">
-            <Form.Label>Orchid name</Form.Label>
+            <Form.Label> Name</Form.Label>
             <Form.Control required type="text" placeholder="First name" />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustom02">
-            <Form.Label>habitat</Form.Label>
-            <Form.Control required type="text" placeholder="habitat " />
+            <Form.Label>Name</Form.Label>
+            <Form.Control required type="text" placeholder="Last name " />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustomUsername">
-            <Form.Label>Rating</Form.Label>
+            <Form.Label>email</Form.Label>
             <InputGroup hasValidation>
-              <InputGroup.Text id="inputGroupPrepend">*</InputGroup.Text>
+              <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
               <Form.Control
-                type="number"
-                placeholder="number"
+                type="string"
+                placeholder="string "
                 aria-describedby="inputGroupPrepend"
                 required
               />
@@ -48,14 +48,14 @@ export default function Contact() {
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} md="6" controlId="validationCustom03">
-            <Form.Label>color</Form.Label>
-            <Form.Control type="text" placeholder="color" required />
-            <Form.Control.Feedback type="invalid">color</Form.Control.Feedback>
+            <Form.Label>phone</Form.Label>
+            <Form.Control type="text" placeholder="number" required />
+            <Form.Control.Feedback type="invalid">phone</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="6" controlId="validationCustom04">
-            <Form.Label>origin</Form.Label>
+            <Form.Label>nation</Form.Label>
             <Form.Select aria-label="Default select example">
-              <option>Choose your favorite origin</option>
+              <option>Choose your nation</option>
               <option value="1">EngLand</option>
               <option value="2">France</option>
               <option value="3">Spain</option>
@@ -69,7 +69,7 @@ export default function Contact() {
           </Form.Group>
         </Row>
         <Form.Group style={{ marginTop: "20px", marginBottom: "30px" }}>
-          <Form.Label>Description</Form.Label>
+          <Form.Label>content</Form.Label>
           <div className="input-group">
             <span className="input-group-text">
               <FontAwesomeIcon icon={faEdit} />
@@ -81,7 +81,7 @@ export default function Contact() {
               required
             />
             <Form.Control.Feedback type="invalid">
-              Please write Description here.
+              Please write content here.
             </Form.Control.Feedback>
           </div>
         </Form.Group>
