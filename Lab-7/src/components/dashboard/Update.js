@@ -53,17 +53,7 @@ const Update = ({ onUpdate }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Orchid ID:
-          <input
-            type="text"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-            required
-          />
-        </label>
-      </div>
+      <div></div>
       <div>
         <label>
           Name:

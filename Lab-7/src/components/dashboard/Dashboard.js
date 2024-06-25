@@ -80,12 +80,12 @@ const Dashboard = () => {
 
   const handleUpdateOrchid = async () => {
     try {
-      await axios.put(`${baseUrl}/${selectedOrchid.id}`, selectedOrchid);
-      console.log("Successfully updated orchid with ID:", selectedOrchid.id);
+      // Fetch updated orchids after successful update
+      const response = await axios.get(baseUrl);
+      setOrchids(response.data);
+      console.log("Successfully updated orchids.");
     } catch (error) {
-      console.error("Error updating orchid:", error);
-    } finally {
-      setOpenDialog(false);
+      console.error("Error updating orchids:", error);
     }
   };
 
