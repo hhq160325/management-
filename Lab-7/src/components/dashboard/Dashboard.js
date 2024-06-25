@@ -15,14 +15,14 @@ import { useConfirm } from "material-ui-confirm";
 import { toast } from "react-toastify";
 
 function Dashboard({ data }) {
-  const [staff, setStaff] = useState([]);
+  const [orchid, setOrchid] = useState([]);
   const baseUrl = `https://6677a9ef145714a1bd754da3.mockapi.io/orchild`;
   const confirm = useConfirm();
 
   useEffect(() => {
     fetch(baseUrl)
       .then((response) => response.json())
-      .then((data) => setStaff(data))
+      .then((data) => setOrchid(data))
       .catch((error) => console.log(error.message));
   }, []);
 
@@ -47,8 +47,8 @@ function Dashboard({ data }) {
           .then((res) => res.json())
           .then((data) => {
             toast.success(`Delete orchid ID: ${id} success!`);
-            setStaff((prevStaff) =>
-              prevStaff.filter((staff) => staff.id !== id)
+            setOrchid((prevOrchid) =>
+              prevOrchid.filter((orchid) => orchid.id !== id)
             );
           })
           .catch((err) => {
@@ -85,26 +85,26 @@ function Dashboard({ data }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {staff.map((staff) => (
-                <TableRow key={staff.id}>
-                  <TableCell align="center">{staff.id}</TableCell>
+              {orchid.map((orchid) => (
+                <TableRow key={orchid.id}>
+                  <TableCell align="center">{orchid.id}</TableCell>
                   <TableCell component="th" scope="row" align="center">
                     <img
                       style={{ width: "100px", height: "100px" }}
-                      src={staff.avatar}
+                      src={orchid.avatar}
                       alt=""
                     />
                   </TableCell>
-                  <TableCell align="center">{staff.name}</TableCell>
-                  <TableCell align="center">{staff.color}</TableCell>
-                  <TableCell align="center">{staff.origin}</TableCell>
+                  <TableCell align="center">{orchid.name}</TableCell>
+                  <TableCell align="center">{orchid.color}</TableCell>
+                  <TableCell align="center">{orchid.origin}</TableCell>
                   <TableCell align="center">
                     <Button
                       variant="outlined"
                       color="success"
                       className="edit-btn"
                       onClick={() => {
-                        EditFunction(staff.id);
+                        EditFunction(orchid.id);
                       }}
                     >
                       <EditIcon />
@@ -114,7 +114,7 @@ function Dashboard({ data }) {
                       color="error"
                       className="delete-btn"
                       onClick={() => {
-                        RemoveFunction(staff.id);
+                        RemoveFunction(orchid.id);
                       }}
                     >
                       <DeleteIcon />

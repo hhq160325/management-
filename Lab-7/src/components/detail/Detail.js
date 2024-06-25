@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
 function Detail() {
   const { id } = useParams();
@@ -151,11 +152,25 @@ function Detail() {
                     textAlign: "left",
                     fontSize: "20px",
                     marginLeft: "40px",
+                    display: "flex",
+                    alignItems: "center",
                   }}
                   variant="body2"
                   gutterBottom
                 >
-                  Video URL: <a href={orchid.videoUrl}>{orchid.videoUrl}</a>
+                  Video URL:
+                  <a
+                    href={orchid.videoUrl}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      textDecoration: "none",
+                      color: "inherit",
+                      marginLeft: "5px",
+                    }}
+                  >
+                    <YouTubeIcon sx={{ marginRight: "5px" }} />
+                  </a>
                 </Typography>
               </Grid>
             </Grid>

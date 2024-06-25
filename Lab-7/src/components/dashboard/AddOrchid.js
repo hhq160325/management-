@@ -45,7 +45,7 @@ function AddOrchid() {
       category: "",
       habitat: "",
       description: "",
-      videoUrl: "https://www.youtube.com/embed/Bj9nvQR_uFY?si=msu4oqiMB6SI_o8N",
+      videoUrl: "",
     },
     validationSchema,
     onSubmit: (values) => {
