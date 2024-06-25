@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Add from "./Add";
+import Remove from "./Remove";
+import Update from "./Update";
+import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,135 +11,173 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { Button } from "@mui/material";
-import "./Dashboard.scss";
-import { Link, useNavigate } from "react-router-dom";
-import { useConfirm } from "material-ui-confirm";
-import { toast } from "react-toastify";
+import UpdateIcon from "@mui/icons-material/Update";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 
-function Dashboard({ data }) {
-  const [staff, setStaff] = useState([]);
+const Dashboard = () => {
+  const [orchids, setOrchids] = useState([]);
   const baseUrl = `https://6677a9ef145714a1bd754da3.mockapi.io/orchild`;
-  const confirm = useConfirm();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedOrchid, setSelectedOrchid] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showRemoveForm, setShowRemoveForm] = useState(false);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogContent, setDialogContent] = useState(null);
 
   useEffect(() => {
     fetch(baseUrl)
       .then((response) => response.json())
-      .then((data) => setStaff(data))
+      .then((data) => setOrchids(data))
       .catch((error) => console.log(error.message));
   }, []);
 
-  const navigate = useNavigate();
+  const handleMenuOpen = (event, orchid) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedOrchid(orchid);
+  };
 
-  const EditFunction = (id) => {
-    navigate("/dashboard/edit/" + id);
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedOrchid(null);
   };
-  const RemoveFunction = (id) => {
-    confirm({
-      title: `Delete orchid id: ${id}`,
-      description: "Are you sure you want to delete this orchid?",
-    })
-      .then(() => {
-        const baseUrl = `https://6677a9ef145714a1bd754da3.mockapi.io/orchild`;
-        fetch(baseUrl + id, {
-          method: "DELETE",
-          headers: {
-            "content-type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            toast.success(`Delete orchid ID: ${id} success!`);
-            setStaff((prevStaff) =>
-              prevStaff.filter((staff) => staff.id !== id)
-            );
-          })
-          .catch((err) => {
-            toast.error(err.message);
-          });
-      })
-      .catch(() => {
-        toast.warning("Cancel delete");
-      });
+
+  const handleUpdateClick = () => {
+    setDialogContent(<Update onUpdate={handleUpdateOrchid} />);
+    setOpenDialog(true);
+    handleMenuClose();
   };
+
+  const handleRemoveClick = () => {
+    setDialogContent(<Remove onRemove={handleRemoveOrchid} />);
+    setOpenDialog(true);
+    handleMenuClose();
+  };
+
+  const handleAddButtonClick = () => {
+    setDialogContent(<Add onAdd={handleAddOrchid} />);
+    setOpenDialog(true);
+  };
+
+  const handleRemoveOrchid = async () => {
+    try {
+      await axios.delete(`${baseUrl}/${selectedOrchid.id}`);
+      setOrchids(orchids.filter((orchid) => orchid.id !== selectedOrchid.id));
+      console.log("Successfully removed orchid with ID:", selectedOrchid.id);
+    } catch (error) {
+      console.error("Error removing orchid:", error);
+    } finally {
+      setOpenDialog(false);
+    }
+  };
+
+  const handleUpdateOrchid = async () => {
+    try {
+      await axios.put(`${baseUrl}/${selectedOrchid.id}`, selectedOrchid);
+      console.log("Successfully updated orchid with ID:", selectedOrchid.id);
+    } catch (error) {
+      console.error("Error updating orchid:", error);
+    } finally {
+      setOpenDialog(false);
+    }
+  };
+
+  const handleAddOrchid = () => {
+    fetch(baseUrl)
+      .then((response) => response.json())
+      .then((data) => setOrchids(data))
+      .catch((error) => console.log(error.message));
+    setOpenDialog(false);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   return (
-    <div>
-      {data ? (
-        <TableContainer component={Paper} className="dashboard-container">
-          <h2 style={{ textAlign: "center", color: "red", fontSize: "50px" }}>
-            List of orchid
-          </h2>
-          <Link to="/dashboard/add" className="add-btn">
-            <Button variant="contained">Create</Button>
-          </Link>
-          <Table
-            sx={{ minWidth: 650 }}
-            aria-label="simple table"
-            className="staff-table"
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">ID</TableCell>
-                <TableCell align="center">image</TableCell>
-                <TableCell align="center">Name</TableCell>
-                <TableCell align="center">color</TableCell>
-                <TableCell align="center">origin</TableCell>
-                <TableCell align="center">description</TableCell>
+    <div style={{ padding: "20px" }}>
+      <h1>Orchid Dashboard</h1>
+
+      <Button variant="contained" onClick={handleAddButtonClick}>
+        Add Orchid
+      </Button>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Image</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {orchids.map((orchid) => (
+              <TableRow key={orchid.id}>
+                <TableCell>{orchid.id}</TableCell>
+                <TableCell>{orchid.name}</TableCell>
+                <TableCell>
+                  <img
+                    src={orchid.image}
+                    alt={orchid.name}
+                    style={{ maxWidth: "100px" }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Button
+                    aria-controls="actions-menu"
+                    aria-haspopup="true"
+                    onClick={(event) => handleMenuOpen(event, orchid)}
+                    variant="outlined"
+                  >
+                    Actions
+                  </Button>
+                  <Menu
+                    id="actions-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                  >
+                    <MenuItem onClick={handleRemoveClick}>
+                      <IconButton aria-label="delete">
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                      Remove Orchid
+                    </MenuItem>
+                    <MenuItem onClick={handleUpdateClick}>
+                      <IconButton aria-label="update">
+                        <UpdateIcon fontSize="small" />
+                      </IconButton>
+                      Update Orchid
+                    </MenuItem>
+                  </Menu>
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {staff.map((staff) => (
-                <TableRow key={staff.id}>
-                  <TableCell align="center">{staff.id}</TableCell>
-                  <TableCell component="th" scope="row" align="center">
-                    <img
-                      style={{ width: "100px", height: "100px" }}
-                      src={staff.avatar}
-                      alt=""
-                    />
-                  </TableCell>
-                  <TableCell align="center">{staff.name}</TableCell>
-                  <TableCell align="center">{staff.color}</TableCell>
-                  <TableCell align="center">{staff.origin}</TableCell>
-                  <TableCell align="center">
-                    <Button
-                      variant="outlined"
-                      color="success"
-                      className="edit-btn"
-                      onClick={() => {
-                        EditFunction(staff.id);
-                      }}
-                    >
-                      <EditIcon />
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      className="delete-btn"
-                      onClick={() => {
-                        RemoveFunction(staff.id);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <div
-          style={{ color: "red", textAlign: "center", fontSize: "40px" }}
-          className="dashboard-container"
-        >
-          Please login to access the dashboard.
-        </div>
-      )}
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Form</DialogTitle>
+        <DialogContent>{dialogContent}</DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
-}
+};
 
 export default Dashboard;

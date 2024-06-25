@@ -5,8 +5,10 @@ import { Route, Routes } from "react-router-dom";
 import Contact from "./components/contact/Contact";
 import Dashboard from "./components/dashboard/Dashboard";
 import Navigation from "./components/navigation/Navigation";
-import AddOrchid from "./components/dashboard/AddOrchid";
-import EditOrchid from "./components/dashboard/EditOrchid";
+import Add from "./components/dashboard/Add";
+import Remove from "./components/dashboard/Remove";
+import Update from "./components/dashboard/Update";
+
 import Login from "./components/login";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
@@ -25,11 +27,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard data={data} />} />
-        <Route path="/dashboard/add" element={<AddOrchid data={data} />} />
-        <Route
-          path="/dashboard/edit/:id"
-          element={<EditOrchid data={data} />}
-        />
+        <Route path="/dashboard/add" element={<Add data={data} />} />
+        <Route path="/dashboard/remove" element={<Remove data={data} />} />
+        <Route path="/dashboard/update" element={<Update data={data} />} />
+
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/login" element={<Login setData={setData} />} />
       </Routes>
