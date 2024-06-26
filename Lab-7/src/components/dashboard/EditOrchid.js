@@ -1,255 +1,219 @@
-// import React, { useEffect } from "react";
-// import { Button, TextField } from "@mui/material";
-// import { Link, useNavigate, useParams } from "react-router-dom";
-// import { useFormik } from "formik";
-// import * as yup from "yup";
-// import { toast } from "react-toastify";
+import React, { useState } from "react";
+import axios from "axios";
+import "./styles.css";
 
-// function EditOrchid({ data }) {
-//   const idDetails = useParams();
-//   const pr = idDetails.id;
-//   const baseUrl = `https://6677a9ef145714a1bd754da3.mockapi.io/orchild`;
+const Update = ({ onUpdate }) => {
+  const [id, setId] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    rating: "",
+    isSpecial: false,
+    image: "",
+    color: "",
+    origin: "",
+    category: "",
+    habitat: "",
+    description: "",
+    videoUrl: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-//   useEffect(() => {
-//     fetch(`${baseUrl}/${pr}`)
-//       .then((response) => response.json())
-//       .then((data) => {
-//         formik.setValues({
-//           id: data.id,
-//           image: data.image,
-//           name: data.name,
-//           rating: data.rating.toString(),
-//           isSpecial: data.isSpecial,
-//           color: data.color,
-//           origin: data.origin,
-//           category: data.category,
-//           habitat: data.habitat,
-//           description: data.description,
-//           videoUrl: data.videoUrl,
-//         });
-//       })
-//       .catch((error) => console.log(error.message));
-//   }, [baseUrl, pr]);
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+    if (error) setError(null);
+    if (success) setSuccess(false);
+  };
 
-//   const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      await axios.put(
+        `https://6677a9ef145714a1bd754da3.mockapi.io/orchild/${id}`,
+        formData
+      );
+      onUpdate();
+      setId("");
+      setFormData({
+        name: "",
+        rating: "",
+        isSpecial: false,
+        image: "",
+        color: "",
+        origin: "",
+        category: "",
+        habitat: "",
+        description: "",
+        videoUrl: "",
+      });
+      setSuccess(true);
+    } catch (error) {
+      setError("Error updating data. Please try again.");
+      console.error("Error updating data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   const validationSchema = yup.object().shape({
-//     image: yup.string().required("Image URL is required"),
-//     name: yup
-//       .string()
-//       .required("Name is required")
-//       .max(255, "Name must be at most 255 characters"),
-//     rating: yup
-//       .number()
-//       .typeError("Rating must be a number")
-//       .integer("Rating must be an integer")
-//       .min(1, "Rating must be at least 1")
-//       .max(5, "Rating must be at most 5")
-//       .required("Rating is required"),
-//     isSpecial: yup.boolean().required("Is Special is required"),
-//     color: yup.string().required("Color is required"),
-//     origin: yup.string().required("Origin is required"),
-//     category: yup.string().required("Category is required"),
-//     habitat: yup.string().required("Habitat is required"),
-//     description: yup.string().required("Description is required"),
-//     videoUrl: yup
-//       .string()
-//       .url("Must be a valid URL")
-//       .required("Video URL is required"),
-//   });
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>
+          Orchid ID:
+          <input
+            type="text"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            required
+            aria-label="Orchid ID"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Name:
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            aria-label="Name"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Rating:
+          <input
+            type="number"
+            name="rating"
+            value={formData.rating}
+            onChange={handleChange}
+            required
+            aria-label="Rating"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Is Special:
+          <input
+            type="checkbox"
+            name="isSpecial"
+            checked={formData.isSpecial}
+            onChange={handleChange}
+            aria-label="Is Special"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Image URL:
+          <input
+            type="text"
+            name="image"
+            value={formData.image}
+            onChange={handleChange}
+            aria-label="Image URL"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Color:
+          <input
+            type="text"
+            name="color"
+            value={formData.color}
+            onChange={handleChange}
+            aria-label="Color"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Origin:
+          <input
+            type="text"
+            name="origin"
+            value={formData.origin}
+            onChange={handleChange}
+            aria-label="Origin"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Category:
+          <input
+            type="text"
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            aria-label="Category"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Habitat:
+          <input
+            type="text"
+            name="habitat"
+            value={formData.habitat}
+            onChange={handleChange}
+            aria-label="Habitat"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Description:
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            aria-label="Description"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Video URL:
+          <input
+            type="text"
+            name="videoUrl"
+            value={formData.videoUrl}
+            onChange={handleChange}
+            aria-label="Video URL"
+          />
+        </label>
+      </div>
+      <button type="submit" disabled={loading}>
+        {loading ? "Updating..." : "Update Orchid"}
+      </button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {success && <p style={{ color: "green" }}>Update successful!</p>}
+    </form>
+  );
+};
 
-//   const formik = useFormik({
-//     initialValues: {
-//       id: "",
-//       image: "",
-//       name: "",
-//       rating: "",
-//       isSpecial: false,
-//       color: "",
-//       origin: "",
-//       category: "",
-//       habitat: "",
-//       description: "",
-//       videoUrl: "",
-//     },
-//     validationSchema: validationSchema,
-//     onSubmit: (values) => {
-//       const orchid = {
-//         id: values.id,
-//         image: values.image,
-//         name: values.name,
-//         rating: parseInt(values.rating),
-//         isSpecial: values.isSpecial,
-//         color: values.color,
-//         origin: values.origin,
-//         category: values.category,
-//         habitat: values.habitat,
-//         description: values.description,
-//         videoUrl: values.videoUrl,
-//       };
-//       fetch(`${baseUrl}/${pr}`, {
-//         method: "PUT",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(orchid),
-//       })
-//         .then((res) => {
-//           if (!res.ok) {
-//             throw new Error("Failed to update orchid");
-//           }
-//           toast.success(`Update orchid id: ${orchid.id} successful!!`);
-//           navigate("/dashboard");
-//         })
-//         .catch((err) => {
-//           console.error("Error updating orchid:", err.message);
-//           toast.error("Failed to update orchid");
-//         });
-//     },
-//   });
+const Editorchid = ({ onUpdate }) => {
+  return (
+    <div>
+      <h2>Update Orchid</h2>
+      <Update onUpdate={onUpdate} />
+    </div>
+  );
+};
 
-//   return data ? (
-//     <form className="edit-container" onSubmit={formik.handleSubmit}>
-//       <div className="edit-form">
-//         <div className="form-title">
-//           <h2>Edit Orchid</h2>
-//         </div>
-//         <div className="form-body">
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="ID"
-//               variant="filled"
-//               {...formik.getFieldProps("id")}
-//               disabled
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Image URL"
-//               variant="filled"
-//               {...formik.getFieldProps("image")}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Name"
-//               variant="filled"
-//               {...formik.getFieldProps("name")}
-//               helperText={formik.errors.name}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Rating"
-//               variant="filled"
-//               {...formik.getFieldProps("rating")}
-//               helperText={formik.errors.rating}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Is Special"
-//               variant="filled"
-//               {...formik.getFieldProps("isSpecial")}
-//               type="checkbox"
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Color"
-//               variant="filled"
-//               {...formik.getFieldProps("color")}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Origin"
-//               variant="filled"
-//               {...formik.getFieldProps("origin")}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Category"
-//               variant="filled"
-//               {...formik.getFieldProps("category")}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Habitat"
-//               variant="filled"
-//               {...formik.getFieldProps("habitat")}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Description"
-//               variant="filled"
-//               {...formik.getFieldProps("description")}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <TextField
-//               fullWidth
-//               id="filled-basic"
-//               label="Video URL"
-//               variant="filled"
-//               {...formik.getFieldProps("videoUrl")}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <div className="update-btn">
-//               <Button variant="contained" color="success" type="submit">
-//                 Update
-//               </Button>
-//             </div>
-//             <div className="cancel-btn">
-//               <Link to="/dashboard">
-//                 <Button
-//                   variant="contained"
-//                   color="error"
-//                   onClick={() => toast.warning("Cancel update orchid!")}
-//                 >
-//                   Cancel
-//                 </Button>
-//               </Link>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </form>
-//   ) : null;
-// }
-
-// export default EditOrchid;
+export default Editorchid;

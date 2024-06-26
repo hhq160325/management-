@@ -8,6 +8,7 @@ import Navigation from "./components/navigation/Navigation";
 import Add from "./components/dashboard/Add";
 import Remove from "./components/dashboard/Remove";
 import Update from "./components/dashboard/Update";
+import EditOrchid from "./components/dashboard/EditOrchid";
 
 import Login from "./components/login";
 import { useState } from "react";
@@ -30,7 +31,10 @@ function App() {
         <Route path="/dashboard/add" element={<Add data={data} />} />
         <Route path="/dashboard/remove" element={<Remove data={data} />} />
         <Route path="/dashboard/update" element={<Update data={data} />} />
-
+        <Route
+          path="/dashboard/edit/:id"
+          element={<EditOrchid data={data} />}
+        />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/login" element={<Login setData={setData} />} />
       </Routes>
